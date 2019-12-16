@@ -3,16 +3,24 @@ body {
     margin: 0;
 }
 
+/* Header */
+
 .header-top {
     display: flex;
     justify-content: space-between;
     padding: 15px 25px;
 }
 
-.Content {
-    padding: 0 25px;
-}
-
 .topic {
     font-size: 20px;
+}
+
+.banner {
+    width: 100%;
+}
+
+/* Content */
+
+.Content {
+    padding: 0 25px;
 }
