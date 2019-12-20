@@ -1,11 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
-    drawChart('altersverteilung', 'line', 'Altersverteilung der Tatverdächtigen')
+    // drawChart('altersverteilung', 'line', 'Altersverteilung der Tatverdächtigen')
+    drawChart('abb1_StraftatenUndTatverdächtige - Tabellenblatt1', 'column', 'Altersverteilung der Tatverdächtigen')
 });
+// tab5_StraftatenNachKriminalitätsfeldUndDeliktsbereich - Tabellenblatt1
 
 function drawChart(name, type, title) {
     getDataFromCsv(name + '.csv').then(function(data) {
         console.log(data);
-        Highcharts.chart('altersverteilung', {
+        const placeToInsert = document.getElementById('chart-row')
+        const htmlToInsert = `<div id="${name}" style="width:100%; height:400px;"></div>`
+        placeToInsert.insertAdjacentHTML('beforeend', htmlToInsert)
+        Highcharts.chart(name, {
             chart: {
                 type: type
             },
@@ -13,11 +18,11 @@ function drawChart(name, type, title) {
                 text: title
             },
             xAxis: {
-                categories: data[0].data
+                categories: data.categories
             },
             yAxis: {
                 title: {
-                    text: 'Temperature (°C)'
+                    text: ''
                 }
             },
             plotOptions: {
@@ -26,9 +31,9 @@ function drawChart(name, type, title) {
                         enabled: true
                     },
                     enableMouseTracking: true
-                }
+                }   
             },
-            series: [data[1]]
+            series: data.series
         });
     })   
 }
@@ -40,15 +45,33 @@ function parseData(data) {
     data.forEach(row => {
         for (let index = 0; index < keys.length; index++) {
             if(parsedData.length <= index) {
-                parsedData.push({
-                    name: keys[index],
-                    data: []
-                })
+                    parsedData.push({
+                        name: keys[index],
+                        data: []
+                    })
             }
             parsedData[index].data.push(row[keys[index]])
         }   
     });
-    return parsedData
+
+    // the category (name === '' for multidimensional csv files) has to be at index 1
+    for (let index = 0; index < parsedData.length; index++) {
+        if(parsedData[index].name === '') {
+            const cats = parsedData[index]
+            parsedData.splice(index, 1)
+            parsedData.unshift(cats)
+        }
+    }
+
+    const categories = parsedData[0].data
+    parsedData.splice(0, 1)
+
+    const finalData = {
+        categories: categories,
+        series: parsedData
+    }
+
+    return finalData
 }   
 
 function getDataFromCsv(filename) {
