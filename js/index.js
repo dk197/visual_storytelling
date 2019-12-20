@@ -1,44 +1,36 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // const xdata = getDataFromCsv('altersverteilung.csv')
-    // console.log(xdata);
-    // const chart1 = Highcharts.chart('altersverteilung', {
-    //     chart: {
-    //         type: 'line'
-    //     },
-    //     title: {
-    //         text: 'Altersverteilung'
-    //     },
-    //     xAxis: {
-    //         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    //     },
-    //     yAxis: {
-    //         title: {
-    //             text: 'Temperature (°C)'
-    //         }
-    //     },
-    //     plotOptions: {
-    //         line: {
-    //             dataLabels: {
-    //                 enabled: true
-    //             },
-    //             enableMouseTracking: false
-    //         }
-    //     },
-    //     series: [{
-    //         name: 'Tokyo',
-    //         data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-    //     }, {
-    //         name: 'London',
-    //         data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-    //     }]
-    // });
-    drawChart('altersverteilung')
+    drawChart('altersverteilung', 'line', 'Altersverteilung der Tatverdächtigen')
 });
 
-function drawChart(name) {
-    const data = getDataFromCsv(name + '.csv')
-    // console.log(data);
-    
+function drawChart(name, type, title) {
+    getDataFromCsv(name + '.csv').then(function(data) {
+        console.log(data);
+        Highcharts.chart('altersverteilung', {
+            chart: {
+                type: type
+            },
+            title: {
+                text: title
+            },
+            xAxis: {
+                categories: data[0].data
+            },
+            yAxis: {
+                title: {
+                    text: 'Temperature (°C)'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: true
+                }
+            },
+            series: [data[1]]
+        });
+    })   
 }
 
 function parseData(data) {
@@ -60,45 +52,19 @@ function parseData(data) {
 }   
 
 function getDataFromCsv(filename) {
+    return new Promise((resolve, reject) => {
+        Papa.parse('../data/'+filename, {
+            header: true,
+            download: true,
+            dynamicTyping: true,
+            complete: function(results) {
+                const data = results.data
+                const xdata = parseData(data)
+                resolve(xdata)
+            }
+        });
+    })
     
-    Papa.parse('../data/'+filename, {
-        header: true,
-        download: true,
-        dynamicTyping: true,
-        complete: function(results) {
-            const data = results.data
-            console.log(data);
-            const xdata = parseData(data)
-            console.log(xdata);
-            const chart1 = Highcharts.chart('altersverteilung', {
-                chart: {
-                    type: 'line'
-                },
-                title: {
-                    text: 'Altersverteilung'
-                },
-                xAxis: {
-                    categories: xdata[0].data
-                    // categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-                },
-                yAxis: {
-                    title: {
-                        text: 'Temperature (°C)'
-                    }
-                },
-                plotOptions: {
-                    line: {
-                        dataLabels: {
-                            enabled: true
-                        },
-                        enableMouseTracking: false
-                    }
-                },
-                series: [xdata[1]]
-            });
-            // data = results.data;
-        }
-    });
     // https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server
     // python -m http.server
 
