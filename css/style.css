@@ -1,22 +1,73 @@
 body {
     background-color: white;
     margin: 0;
+    font-family: 'Muli';
+    color: #0D1321;
 }
 
 /* Header */
 
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 25px;
+header {
+    height: 100vh;
+    overflow: hidden;
 }
 
+.header-number, .header-text, .header-text, .header-title, .header-credit, .header-logo {
+    position: absolute;
+    color: white;
+    left: 5%;
+    font-family: 'Jost';
+}
+
+.header-number {
+    top: 10%;
+    font-size: 120px;
+    font-weight: bold;
+}
+
+.header-text {
+    top: 25%;
+    font-size: 50px;
+}
+
+.header-title {
+    top: 40%;
+    font-size: 70px;
+    width: 400px;
+}
+
+.header-credit {
+    top: 80%;
+    font-size: 18px;
+    width: 400px;
+}
+
+.header-logo {
+    top: 87%;
+    width: 100px;
+    height: auto;
+}
 .topic {
     font-size: 20px;
 }
 
 .banner {
     width: 100%;
+}
+
+.overlay {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #0D1321;
+    top: 0;
+    left: 0;
+    transform: skewX(-30deg);
+    transform-origin: top left;
+    /* z-index: 100; */
+    border-bottom-left-radius: 0;
+    right: auto;
+    transform-origin: top left;
 }
 
 /* Content */
