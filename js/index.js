@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     // drawChart('altersverteilung', 'line', 'Altersverteilung der Tatverdächtigen')
-    drawChart('abb1_StraftatenUndTatverdächtige - Tabellenblatt1', 'column', 'Anzahl Straftaten und Tatverdächtige')
+    drawChart('abb1_StraftatenUndTatverdächtige - Tabellenblatt1', 'column', 'Altersverteilung der Tatverdächtigen')
 });
 // tab5_StraftatenNachKriminalitätsfeldUndDeliktsbereich - Tabellenblatt1
-
-function drawMap()
 
 function drawChart(name, type, title) {
     getDataFromCsv(name + '.csv').then(function(data) {
